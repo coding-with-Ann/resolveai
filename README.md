@@ -131,3 +131,41 @@ tool selection
 confidence checks
 
 response formatting
+
+
+
+Day 4 – Modular Project Structure and Separation of Concerns
+Key Concepts Learned
+1. Why is splitting code into main.py, schemas.py, and logic.py better than keeping everything in one file?
+
+Splitting code into separate modules improves readability, maintainability, reusability, and debugging. It separates API routing, data contracts, and business logic so the codebase scales more cleanly as the project grows.
+
+2. What kind of code should go into schemas.py?
+
+schemas.py should contain Pydantic request and response models that define the input and output contracts of the API.
+
+3. What kind of code should go into logic.py?
+
+logic.py should contain reusable business logic and helper functions, so endpoints stay focused on request handling and response construction.
+
+4. Why is modular structure especially useful in Applied AI systems?
+
+Modular structure is especially useful in Applied AI systems because AI applications quickly grow into multiple components such as schemas, prompt builders, model clients, retrieval logic, tool orchestration, evaluation code, and API routes. Separating these concerns makes the system easier to test, maintain, extend, and debug as complexity increases.
+
+5. What does uvicorn app.main:app --reload mean?
+
+uvicorn starts the ASGI server
+
+app is the Python package/folder
+
+main is the module/file
+
+app after the colon is the FastAPI application object inside main.py
+
+--reload automatically restarts the server whenever code changes are saved during development
+
+
+Modularization is not just about cleanliness — it is about scalability.
+As systems grow, clear separation between routing, schemas, and logic makes refactoring safer and future expansion much easier.
+
+
