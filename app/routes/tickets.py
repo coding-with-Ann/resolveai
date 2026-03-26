@@ -20,8 +20,9 @@ from app.schemas import (
     TicketTagResponse,
     TicketTriageRequest,
     TicketTriageResponse,
-    QueueCheckRequest, 
-    QueueCheckResponse
+    QueueCheckRequest,
+    QueueCheckResponse,
+    TicketSummaryResponse
 )
 
 router = APIRouter(prefix="/tickets", tags=["tickets"])
@@ -89,6 +90,26 @@ def escalation(ticket: EscalationCheckRequest) -> EscalationCheckResponse:
     )
 
 
-@router.post("queue-check", response_model=QueueCheckResponse)
-def queue_check(ticket: QueueCheckRequest)-> QueueCheckResponse:
-    return QueueCheckResponse(category=classify_issue(ticket.issue), is_urgent=is_urgent_priority(ticket.priority))
+@router.post("/queue-check", response_model=QueueCheckResponse)
+def queue_check(ticket: QueueCheckRequest) -> QueueCheckResponse:
+    category = classify_issue(ticket.issue)
+    is_urgent = is_urgent_priority(ticket.priority)
+    recommended_queue = get_recommended_queue(category, is_urgent)
+
+    return QueueCheckResponse(
+        category=category,
+        is_urgent=is_urgent,
+        recommended_queue=recommended_queue,
+    )
+
+
+@router.post("/summary", response_model=TicketSummaryResponse)
+def ticket_summary(ticket: TicketPreviewRequest) -> TicketSummaryResponse:
+    summary = build_ticket_summary(ticket.customer_name, ticket.issue)
+    category = classify_issue(ticket.issue)
+
+    return TicketSummaryResponse(
+        customer_name=ticket.customer_name,
+        summary=summary,
+        category=category,
+    )
