@@ -1,10 +1,10 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class TicketPreviewRequest(BaseModel):
-    customer_name: str
-    issue: str
-    priority: int
+    customer_name: str = Field(..., min_length=2, max_length=50)
+    issue: str = Field(..., min_length=5, max_length=200)
+    priority: int = Field(..., ge=1, le=3)
 
 
 class TicketPreviewResponse(BaseModel):
@@ -16,8 +16,8 @@ class TicketPreviewResponse(BaseModel):
 
 
 class PriorityCheckRequest(BaseModel):
-    customer_name: str
-    priority: int
+    customer_name: str = Field(..., min_length=2, max_length=50)
+    priority: int = Field(..., ge=1, le=3)
 
 
 class PriorityCheckResponse(BaseModel):
@@ -27,7 +27,7 @@ class PriorityCheckResponse(BaseModel):
 
 
 class TicketTagRequest(BaseModel):
-    issue: str
+    issue: str = Field(..., min_length=5, max_length=200)
 
 
 class TicketTagResponse(BaseModel):
@@ -36,9 +36,9 @@ class TicketTagResponse(BaseModel):
 
 
 class TicketTriageRequest(BaseModel):
-    customer_name: str
-    issue: str
-    priority: int
+    customer_name: str = Field(..., min_length=2, max_length=50)
+    issue: str = Field(..., min_length=5, max_length=200)
+    priority: int = Field(..., ge=1, le=3)
 
 
 class TicketTriageResponse(BaseModel):
@@ -50,16 +50,15 @@ class TicketTriageResponse(BaseModel):
 
 
 class EscalationCheckRequest(BaseModel):
-    customer_name: str
-    priority: int
-    issue: str
+    customer_name: str = Field(..., min_length=2, max_length=50)
+    priority: int = Field(..., ge=1, le=3)
+    issue: str = Field(..., min_length=5, max_length=200)
 
 
 class EscalationCheckResponse(BaseModel):
     customer_name: str
     should_escalate: bool
     reason: str
-
 
 
 class TicketSummaryResponse(BaseModel):
@@ -69,10 +68,11 @@ class TicketSummaryResponse(BaseModel):
 
 
 class QueueCheckRequest(BaseModel):
-    issue: str 
-    priority: int 
+    issue: str = Field(..., min_length=5, max_length=200)
+    priority: int = Field(..., ge=1, le=3)
+
 
 class QueueCheckResponse(BaseModel):
-    category: str 
-    is_urgent: bool 
-    recommended_queue: str 
+    category: str
+    is_urgent: bool
+    recommended_queue: str
